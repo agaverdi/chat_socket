@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+
+
+  mongo:
+    container_name: mongo
+    image: mongo:4.0.14-xenial
+    restart: on-failure
+    environment:
+        MONGO_INITDB_ROOT_USERNAME: adil
+        MONGO_INITDB_ROOT_PASSWORD: adil1234
+        
+    env_file: 
+      - .env
+    ports:
+      - 27018:27017
+    volumes: 
+    #   - ./.init-mongo.js:/docker-entrypoint-initdb.d/init-mongo-js:ro
+      - ./.mongodb:/data/db
+
+  mongo-express:
+    container_name: mongo-express
+    image: mongo-express:0.49.0
+    restart: on-failure
+    environment: 
+        ME_CONFIG_MONGODB_ADMINUSERNAME: adil
+        ME_CONFIG_MONGODB_ADMINPASSWORD: adil1234
+    ports:
+      - 8082:8081
+    env_file: 
+      - .env
+    depends_on: 
+      - mongo
